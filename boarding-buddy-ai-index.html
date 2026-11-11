@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boarding Buddy AI</title>
+  <style>
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #173f9f;
+      --ink: #172033;
+      --muted: #64748b;
+      --bg: #f4f7fc;
+      --card: #ffffff;
+      --line: #e5eaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    header {
+      background: linear-gradient(110deg, #1746a2, #2877ed);
+      color: white;
+      padding: 18px clamp(18px, 4vw, 56px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 5px 18px #173f9f22;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 13px; background: #fff;
+      color: var(--blue); display: grid; place-items: center; font-size: 23px;
+    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-right button {
+      border: 1px solid #ffffff66; background: #ffffff18; color: white;
+      border-radius: 11px; padding: 9px 13px; cursor: pointer; font-weight: 650;
+    }
+    main { max-width: 1180px; margin: 30px auto; padding: 0 20px 50px; }
+    .welcome {
+      background: linear-gradient(120deg, #e6efff, #ffffff);
+      border: 1px solid #d9e6ff; border-radius: 22px; padding: 27px;
+      display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    }
+    .eyebrow { color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 8px 0; font-size: clamp(25px, 4vw, 36px); }
+    .welcome p { margin: 0; color: var(--muted); }
+    .date {
+      background: white; border: 1px solid var(--line); border-radius: 16px;
+      padding: 15px 19px; min-width: 145px; text-align: center;
+    }
+    .date strong { display: block; font-size: 23px; color: var(--blue); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; margin: 30px 0 15px; gap: 10px; }
+    h2 { margin: 0; font-size: 22px; }
+    .section-head span { color: var(--muted); font-size: 13px; }
+    .tools {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px;
+    }
+    .tool {
+      border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+      padding: 19px; text-align: left; cursor: pointer; min-height: 145px;
+      transition: transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .tool:hover { transform: translateY(-3px); box-shadow: 0 12px 28px #1c376b12; border-color: #b9d0ff; }
+    .tool .icon {
+      width: 43px; height: 43px; border-radius: 13px; display: grid; place-items: center;
+      font-size: 22px; margin-bottom: 13px;
+    }
+    .tool strong { display: block; font-size: 15px; margin-bottom: 5px; }
+    .tool small { color: var(--muted); line-height: 1.45; }
+    .subjects { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .subject {
+      background: white; border: 1px solid var(--line); border-radius: 14px;
+      padding: 16px; text-align: left; cursor: pointer; font-weight: 750; color: var(--ink);
+    }
+    .subject:hover { border-color: var(--blue); color: var(--blue); }
+    .panel {
+      margin-top: 25px; padding: 22px; border: 1px solid var(--line);
+      background: white; border-radius: 18px;
+    }
+    .panel p { color: var(--muted); line-height: 1.6; }
+    .panel button, .primary {
+      background: var(--blue); color: white; border: 0; border-radius: 11px;
+      padding: 11px 16px; font-weight: 700; cursor: pointer;
+    }
+    .hidden { display: none; }
+    footer { text-align: center; color: #8490a3; padding: 25px 12px; font-size: 12px; }
+    @media (max-width: 850px) {
+      .tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .subjects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      header { align-items: flex-start; }
+      .brand { font-size: 16px; }
+      .welcome { align-items: flex-start; flex-direction: column; }
+      .date { text-align: left; }
+      .tools { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .tool { padding: 14px; min-height: 135px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><div class="logo">🎓</div><span>Boarding Buddy AI</span></div>
+    <div class="header-right">
+      <button onclick="showSection('announcements')">🔔 Notices</button>
+      <button onclick="showSection('profile')">My Profile</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <div>
+        <div class="eyebrow">Your school companion</div>
+        <h1>Welcome to Boarding Buddy AI!</h1>
+        <p>A smarter, friendlier way to learn, connect and explore your school.</p>
+      </div>
+      <div class="date"><strong id="day">Today</strong><span id="fullDate">Loading date…</span></div>
+    </section>
+
+    <div class="section-head">
+      <h2>Your Tools</h2><span>Everything you need in one place</span>
+    </div>
+    <section class="tools">
+      <button class="tool" onclick="showSection('learning')"><span class="icon" style="background:#e8efff">🧭</span><strong>Learning Pathway</strong><small>Organise your learning journey.</small></button>
+      <button class="tool" onclick="showSection('assignments')"><span class="icon" style="background:#fff0df">📝</span><strong>Assignments & Resources</strong><small>Find tasks and learning materials.</small></button>
+      <button class="tool" onclick="showSection('progress')"><span class="icon" style="background:#e5f8ef">📊</span><strong>Progress Report</strong><small>Review your learning progress.</small></button>
+      <button class="tool" onclick="showSection('community')"><span class="icon" style="background:#f3eaff">💬</span><strong>Student Community</strong><small>Connect with school communities.</small></button>
+      <button class="tool" onclick="showSection('announcements')"><span class="icon" style="background:#fff1f1">📢</span><strong>Announcements</strong><small>Keep up with school news.</small></button>
+      <button class="tool" onclick="showSection('calendar')"><span class="icon" style="background:#e4f7fb">📅</span><strong>My Calendar</strong><small>See important dates and events.</small></button>
+      <button class="tool" onclick="showSection('map')"><span class="icon" style="background:#eaf7e8">🗺️</span><strong>School Map</strong><small>Explore campus places and routes.</small></button>
+      <button class="tool" onclick="showSection('buddy')"><span class="icon" style="background:#fff5d9">🤖</span><strong>AI Buddy</strong><small>Get help with learning and school life.</small></button>
+    </section>
+
+    <div class="section-head">
+      <h2>My Subjects</h2><span>Choose a subject to get started</span>
+    </div>
+    <section class="subjects">
+      <button class="subject" onclick="openSubject('Physics')">⚛️ Physics</button>
+      <button class="subject" onclick="openSubject('English')">📚 English</button>
+      <button class="subject" onclick="openSubject('Mathematics')">➗ Mathematics</button>
+      <button class="subject" onclick="openSubject('Chemistry')">🧪 Chemistry</button>
+      <button class="subject" onclick="openSubject('Biology')">🧬 Biology</button>
+      <button class="subject" onclick="openSubject('Geography')">🌍 Geography</button>
+      <button class="subject" onclick="openSubject('Design')">🎨 Design</button>
+    </section>
+
+    <section id="detail" class="panel hidden" aria-live="polite">
+      <h2 id="detailTitle">Welcome</h2>
+      <p id="detailText"></p>
+      <button onclick="closeDetail()">Close</button>
+    </section>
+  </main>
+  <footer>Boarding Buddy AI · Student project prototype · Use demo information only</footer>
+
+  <script>
+    const today = new Date();
+    document.getElementById('day').textContent = today.toLocaleDateString('en-US', { weekday: 'long' });
+    document.getElementById('fullDate').textContent = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+    const descriptions = {
+      learning: 'Your personalised learning pathway will appear here.',
+      assignments: 'Assignments, class resources and study materials will be organised here.',
+      progress: 'Your private progress report will appear here when a secure student database is connected.',
+      community: 'Student groups and messaging will be added here. Community features need sign-in and moderation.',
+      announcements: 'School and subject announcements will appear here.',
+      calendar: 'Your timetable, deadlines and school events will appear here.',
+      map: 'The interactive campus map will be added here. Building locations should be checked with the school.',
+      buddy: 'AI Buddy interface placeholder. A real AI service requires a secure backend and may have usage limits.',
+      profile: 'Student profile settings will appear here.'
+    };
+
+    function showSection(section) {
+      const panel = document.getElementById('detail');
+      document.getElementById('detailTitle').textContent =
+        section === 'buddy' ? 'AI Buddy' : section.charAt(0).toUpperCase() + section.slice(1);
+      document.getElementById('detailText').textContent = descriptions[section] || 'This section is coming soon.';
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function openSubject(subject) {
+      const panel = document.getElementById('detail');
+      document.getElementById('detailTitle').textContent = subject;
+      document.getElementById('detailText').textContent =
+        'Resources Library  ·  Choose an Assignment Type  ·  SA Test  ·  My Learning Tasks';
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeDetail() {
+      document.getElementById('detail').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
